@@ -6,7 +6,7 @@
 /*   By: toliver <toliver@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/07 12:09:17 by toliver           #+#    #+#             */
-/*   Updated: 2019/02/11 08:59:10 by toliver          ###   ########.fr       */
+/*   Updated: 2019/07/21 22:32:31 by toliver          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ typedef	struct		s_lst
 	int				fd;
 	struct s_lst	*next;
 }					t_lst;
+
+
+char				**ft_split(char *str, char *charset);
+int					ft_gnl(const int fd, char **line);
 
 void				ft_putchar(char c);
 void				ft_putchar_fd(char c, int fd);
@@ -89,8 +93,6 @@ int					ft_isdigit(int c);
 int					ft_isalpha(int c);
 int					ft_atoi(const char *str);
 int					ft_atoi_base(const char *str, unsigned int from);
-float				ft_atof(char *str);
-double				ft_atod(char *str);
 int					ft_memcmp(const void *b1, const void *b2, size_t len);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strcmp_case_insensitive(const char *s1, const char *s2);
@@ -103,25 +105,5 @@ void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-unsigned long		ft_atoi_base_ll(const char *val, unsigned int from);
-int					ft_strisvalidint(const char *str);
-void				ft_error(char *str);
-
-/*
-** DAMIAN LIBFT
-*/
-
-int					ft_string_to_int(const char *str);
-char				*ft_string_sub(char const *s, unsigned int start,
-						size_t len);
-char				**ft_string_split(char const *s, char c);
-int					ft_string_equals_n(char const *s1, char const *s2,
-						size_t n);
-int					ft_string_equals(char const *s1, char const *s2);
-char				*ft_string_new(size_t size);
-int					ft_string_compare(const char *s1, const char *s2);
-int					ft_string_compare_n(const char *s1, const char *s2,
-						size_t n);
-void				*ft_memory_alloc(size_t size);
 
 #endif

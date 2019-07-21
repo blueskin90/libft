@@ -6,7 +6,7 @@
 #    By: toliver <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/12 01:24:53 by toliver           #+#    #+#              #
-#    Updated: 2019/01/29 12:41:54 by cvermand         ###   ########.fr        #
+#    Updated: 2019/07/21 22:27:40 by toliver          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ FILES = atoi \
 		strstr \
 		strsub \
 		strtrim \
+		split \
 		tolower \
 		toupper \
 		lstnew\
@@ -74,6 +75,7 @@ FILES = atoi \
 		lstiter \
 		lstmap \
 		get_next_line \
+		gnl \
 
 INCLUDES = -I./includes
 
@@ -84,6 +86,11 @@ OBJS = $(addprefix objs/, $(addsuffix .o, \
 .PHONY: all clean fclean re
 
 all: $(NAME)
+
+test: $(NAME) main
+
+main:
+	gcc main.c $(FLAGS) ./libft.a $(INCLUDES)
 
 analyze: 
 	gcc --analyze $(addprefix srcs/, $(addsuffix .c, $(addprefix ft_, $(FILES))))  $(INCLUDES)
