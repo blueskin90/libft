@@ -51,7 +51,7 @@ static int			str_fill(char **str, const int fd)
 		buf[retval] = '\0';
 		if (!(tmp = ft_strjoin(*str, buf)) && retval != 0)
 		{
-			free(str);
+			free(*str);
 			return (-1);
 		}
 		free(*str);

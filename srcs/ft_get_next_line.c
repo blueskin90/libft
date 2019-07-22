@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-// SI UN DES MALLOCS FAIL, FREE LE RESTE !
 static int			elem_fill(t_lst *lst, int fd)
 {
 	char			buf[BUFF_SIZE + 1];
@@ -101,7 +100,7 @@ void				gnl_delete_node(t_lst **lst, t_lst *node)
 	free(node->str);
 	free(node);
 }
-// faire un gnl mono fd et multi fd, et free tout si ca part en couille !
+
 int					ft_get_next_line(const int fd, char **line)
 {
 	static t_lst	*lst = NULL;

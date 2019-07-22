@@ -12,7 +12,7 @@
 
 NAME = libft.a
 
-FLAGS = -Wall -Wextra -Werror -Ofast -g3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -Ofast
 
 FILES = atoi \
 		atoll \
@@ -86,11 +86,6 @@ OBJS = $(addprefix objs/, $(addsuffix .o, \
 .PHONY: all clean fclean re
 
 all: $(NAME)
-
-test: $(NAME) main
-
-main:
-	gcc main.c $(FLAGS) ./libft.a $(INCLUDES)
 
 analyze: 
 	gcc --analyze $(addprefix srcs/, $(addsuffix .c, $(addprefix ft_, $(FILES))))  $(INCLUDES)

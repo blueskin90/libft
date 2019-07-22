@@ -15,9 +15,7 @@
 char				*ft_strsub(char const *s, unsigned int start, size_t len)
 {
 	char			*str;
-	unsigned int	i;
 
-	i = -1u;
 	if (!s || !(str = (char*)malloc(sizeof(char) * (len + 1))))
 		return (NULL);
 	ft_memcpy(str, s + start, len);

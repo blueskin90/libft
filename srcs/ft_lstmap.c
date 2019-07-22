@@ -27,7 +27,10 @@ t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 		{
 			lst = lst->next;
 			if (!(newlist->next = (t_list*)malloc(sizeof(t_list))))
+			{
+				ft_lstfree(newlist);
 				return (NULL);
+			}
 			newlist = newlist->next;
 			*newlist = *f(lst);
 		}
