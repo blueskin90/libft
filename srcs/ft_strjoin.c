@@ -18,10 +18,8 @@ char				*ft_strjoin(char const *s1, char const *s2)
 	unsigned int	j;
 	char			*str;
 
-	if (!s1 || !s2)
-		return (NULL);
-	i = ft_strlen(s1);
-	j = ft_strlen(s2);
+	i = s1 ? ft_strlen(s1) : 0;
+	j = s2 ? ft_strlen(s2) : 0;
 	if (!(str = (char*)malloc(sizeof(char) * (i + j + 1))))
 		return (NULL);
 	ft_memcpy(str, s1, i);

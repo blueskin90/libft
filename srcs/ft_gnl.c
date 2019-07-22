@@ -12,78 +12,66 @@
 
 #include "libft.h"
 
-static int			split_and_return(char **str, char **line)
+#include <stdio.h>
+
+static int			str_split(char **str, char **line)
 {
-	(void)str;
-	(void)line;
-	return (0);
+	char			*tmp;
+	char			*newline;
+
+	newline = ft_strchr(*str, '\n');
+	if (newline == NULL)
+	{
+		*line = *str;
+		*str = NULL;
+		return (1);
+	}
+	if (!(*line = ft_strsub(*str, 0, newline == *str ? 0 : newline - *str))
+			|| !(tmp = ft_strdup(newline + 1)))
+	{
+		free(*line);
+		free(*str);
+		return (-1);
+	}
+	free(*str);
+	*str = tmp;
+	return (1);
 }
 
 static int			str_fill(char **str, const int fd)
 {
 	char			buf[BUFF_SIZE + 1];
-	int				read_ret;
+	int				retval;
 	char			*tmp;
 
-	if (*str && ft_strchr(*str, '\n'))
+	if (ft_strchr(*str, '\n'))
 		return (1);
-	else
+	while ((retval = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		read_ret = read(fd, buf, BUFF_SIZE);
-		if (read_ret == -1)
-			return (-1);
-		buf[read_ret] = '\0';
-		if (!ft_strchr(buf, '\n'))
+		buf[retval] = '\0';
+		if (!(tmp = ft_strjoin(*str, buf)) && retval != 0)
 		{
-			if (!*str && !(*str = ft_strdup(buf)))
-				return (-1);
-			while (!ft_strchr(buf, '\n'))
-			{
-				read_ret = read(fd, buf, BUFF_SIZE);
-				if (read_ret == -1)
-					return (-1);
-				if (!(tmp = ft_strjoin(*str, buf)))
-					return (-1);
-				free(*str);
-				*str = tmp;
-				tmp = NULL;
-			}
+			free(str);
+			return (-1);
 		}
+		free(*str);
+		*str = tmp;
+		if (ft_strchr(*str, '\n') || retval == 0)
+			break ;
 	}
-	return (0);
+	if (retval == 0)
+		*str = NULL;
+	return (1);
 }
 
 int					ft_gnl(const int fd, char **line)
 {
 	static char		*str = NULL;
-	int				retval;
 
-	retval = 0;
-	if (fd < 0)
+	*line = NULL;
+	if (fd < 0 || str_fill(&str, fd) == -1)
 		return (-1);
-	if (str == NULL && (retval = str_fill(&str, fd)) <= 0)
-	{
-		*line = NULL;
-		return (retval);
-	} // ici ma str est forcement remplie, car soit elle n'est pas null, soit si jai un retour de str_fill c'est que je l'ai remplie
-	if (!ft_strchr(str, '\n') && (retval = str_fill(&str, fd)) <= 0)
-	{
-		if (retval < 0)
-		{
-			free(str);
-			str = NULL;
-			return (-1);
-		}
-		*line = str;
-		str = NULL;
+	if (str == NULL)
 		return (0);
-	}
-	if (retval = split_and_return(&str, line) < 0)
-	{
-		free(str);
-		str = NULL;
-		*line = NULL;
-		return (-1);
-	}
-	return (1);
+	return (str_split(&str, line));
 }

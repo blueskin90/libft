@@ -27,7 +27,11 @@ static int		is_charset(char c, char *charset)
 static int		wordnumber(char *str, char *charset, int *words, int *size)
 {
 	if (!str || !charset)
-		return (0);
+	{
+		*words = !str ? 0 : 1;
+		*size = str ? ft_strlen(str) + 1: 0;
+		return (1);
+	}
 	while (*str)
 	{
 		if (!is_charset(*str, charset))
@@ -45,6 +49,7 @@ static int		wordnumber(char *str, char *charset, int *words, int *size)
 				str++;
 		}
 	}
+	*size += *words;
 	return (1);
 }
 
@@ -53,7 +58,7 @@ static int		fill_string(char *arrstr, char *str, int *c, char *charset)
 	int	i;
 
 	i = 0;
-	while (!is_charset(*str, charset) && *str)
+	while (*str && !is_charset(*str, charset))
 	{
 		arrstr[i] = *str;
 		i++;
@@ -61,7 +66,6 @@ static int		fill_string(char *arrstr, char *str, int *c, char *charset)
 		(*c)++;
 	}
 	arrstr[i] = '\0';
-	i++;
 	(*c)++;
 	return (i);
 }
@@ -70,7 +74,6 @@ static int		fill_array(char ***arr, int words, char *str, char *charset)
 {
 	int		word;
 	int		c;
-	int		i;
 
 	word = 0;
 	c = 0;
@@ -78,15 +81,12 @@ static int		fill_array(char ***arr, int words, char *str, char *charset)
 	{
 		if (!is_charset(*str, charset))
 		{
-			i = 0;
-			(*arr)[word] = (char*)((*arr) + sizeof(char*) * (words + 1)
-					+ sizeof(char) * c);
+			(*arr)[word] = ((char*)&((*arr)[words + 1])) + c;//   (char*)((*arr) + sizeof(char*) * (words + 1)
 			str += fill_string((*arr)[word], str, &c, charset);
 			word++;
 		}
-		else
-			while (is_charset(*str, charset))
-				str++;
+		while (is_charset(*str, charset))
+			str++;
 	}
 	return (1);
 }
@@ -99,20 +99,17 @@ char			**ft_split(char *str, char *charset)
 
 	words = 0;
 	size = 0;
-	if (str && charset)
-		wordnumber(str, charset, &words, &size);
-	if (!charset)
-	{
-		words = 1;
-		size = ft_strlen(str) + 1;
-	}
-	if (!(arr = (char**)malloc(sizeof(char*) * words + 1
-					+ sizeof(char) * (size + words))))
+	arr = NULL;
+	wordnumber(str, charset, &words, &size);
+	if (!(arr = (char**)malloc(sizeof(char*) * (words + 1)
+					+ sizeof(char) * (size))))
 		return (NULL);
 	arr[words] = NULL;
+	if (!str)
+		return (arr);
 	if (!charset)
 	{
-		arr[0] = (char*)arr + (sizeof(char*) * (words + 1));
+		arr[0] = (char*)&(arr[2]);
 		ft_strcpy(arr[0], str);
 		return (arr);
 	}
